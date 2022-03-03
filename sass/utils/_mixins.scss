@@ -1,0 +1,59 @@
+// Bouton
+@mixin btn ($place : 'btn', $color : #000, $background : $background-color, $width : 90%) {
+    display: block;
+    cursor: pointer;
+    color: $color;
+    background: $background;
+    border-radius: 25px;
+    width: $width;
+    padding: 15px;
+    border: none;
+    position: relative;
+    box-shadow : map-get($shadow, $place);
+}
+
+//si jamais je veux changer le code couleur du site, il suffi de changer couleur primary etc seulement
+@mixin background-shadow($color : $background-color) {
+    // background-color: $color; // on fixe le background avant de modifier la valeur de $color
+    @if( lightness($color) < 25% ) { //si le background à une couleur claire, l'ombre sera foncée
+        $color : lighten($color, 50%)
+    } @else {
+        $color : darken($color, 50%) //si le background à une couleur foncé, l'ombre sera claire
+    }
+    box-shadow: map-get($shadow, localisation) $color;
+}
+
+//pour avoir une couleur de texte proche du background au hover
+@mixin light-bgcolor-hover($color){  
+    background: $color;
+    &:hover {
+      @if (hue($color) < 180) {
+        color : adjust-hue($color, 30deg);
+      } @else {
+        color : adjust-hue($color, 60deg);
+      }
+    }
+}
+
+// change la couleur du background avec une couleur complementaire
+@mixin hover($color) {
+  @if (hue($color) >= 135 and hue($color) < 180) {
+    $color: complement($color);
+  }@else{
+    $color: adjust-hue($color, -60);
+  }
+  background: $color;
+}
+
+// Media Queries 
+@mixin desktop-only {
+  @media screen and (min-width: 992px) {
+    @content
+  }
+}
+
+@mixin small-phones {
+  @media screen and (max-width: 365px) { // precedement 326px
+    @content
+  }
+}

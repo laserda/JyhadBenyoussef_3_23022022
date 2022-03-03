@@ -1,0 +1,95 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: 'Roboto', arial, sans-serif;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+// btn component
+.btn {
+    &--gradient {
+        z-index: 0;
+        @include btn('localisation', #fff, linear-gradient($secondary-color, $primary-color), 220px);
+        &:hover {
+            &::after {
+                opacity: 1;
+            }
+            box-shadow: map-get($shadow, hover-btn);
+        }
+        // pour éviter de changer la couleur (animer la couleur d’une propriété déclenche des calculs de paint -> moins performant), 
+        // on utilise la propriété opacity sur le ::after 
+        // cela nous permet de faire des transitions entre des couleurs en évitant ces calculs (etape composition et non paint du rendu css)
+        &::after { 
+            content: "";
+            border-radius: 25px;
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(lighten($secondary-color, 5%), lighten($primary-color, 5%));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 250ms;
+        }
+        &--homepage {
+            margin: 0 auto 10px;
+        }
+        &--card {
+            margin: 30px auto;
+        }
+    }
+}
+
+
+//spinner animation on load 
+
+.spinner-container {
+    display:flex;
+    justify-content: center;
+    align-items : center;
+    text-align: center;
+    position : fixed;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    animation : scale 3000ms ease-in-out 1;
+    transform: scale(0);
+    span {
+        z-index: 2;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .spinner-bg {
+        animation : fade 3000ms ease-in-out 1;
+        position : fixed;
+        top: 0;
+        width: 100%;
+        min-height: 100%;
+    }
+    .spinner {
+       background:white;
+       position : absolute;
+       height : 150px;
+       width : 150px;
+       border-radius: 50%;
+       animation: rotate-spinner 3000ms ease-in infinite;
+    }
+    .spinner:before {
+       position: absolute;
+       content : '';
+       left: 0;
+       top: 0;
+       height: 100%;
+       width: 100%;
+       border-radius: 50%;
+    //    box-shadow: 0 0 5px rgba(255,255,255,.3);
+    }
+}
